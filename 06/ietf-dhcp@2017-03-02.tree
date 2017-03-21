@@ -1,0 +1,123 @@
+module: ietf-dhcp
+   +--rw dhcp
+   |  +--rw server {server}?
+   |  |  +--rw lease-time?            uint32
+   |  |  +--rw ping-packet-number?    uint8
+   |  |  +--rw ping-packet-timeout?   uint16
+   |  |  +--rw option
+   |  |  |  +--rw dhcp-server-identifier?   inet:ip-address
+   |  |  |  +--rw domain-name?              string
+   |  |  |  +--rw domain-name-server?       inet:ip-address
+   |  |  |  +--rw interface-mtu?            uint32
+   |  |  |  +--rw netbios-name-server?      inet:ip-address
+   |  |  |  +--rw netbios-node-type?        uint32
+   |  |  |  +--rw netbios-scope?            string
+   |  |  +--rw dhcp-ip-pool* [ip-pool-name]
+   |  |     +--rw ip-pool-name         string
+   |  |     +--rw interface?           if:interface-ref
+   |  |     +--rw gateway-ip?          inet:ip-address
+   |  |     +--rw gateway-mask?        inet:ip-prefix
+   |  |     +--rw lease-time?          uint32
+   |  |     +--rw manual-allocation* [mac-address ip-address]
+   |  |     |  +--rw mac-address    yang:mac-address
+   |  |     |  +--rw ip-address     inet:ip-address
+   |  |     +--rw section* [section-index]
+   |  |     |  +--rw section-index       uint16
+   |  |     |  +--rw section-start-ip    inet:ipv4-address
+   |  |     |  +--rw section-end-ip?     inet:ipv4-address
+   |  |     +--rw option
+   |  |        +--rw dhcp-server-identifier?   inet:ip-address
+   |  |        +--rw domain-name?              string
+   |  |        +--rw domain-name-server?       inet:ip-address
+   |  |        +--rw interface-mtu?            uint32
+   |  |        +--rw netbios-name-server?      inet:ip-address
+   |  |        +--rw netbios-node-type?        uint32
+   |  |        +--rw netbios-scope?            string
+   |  +--rw relay {relay}?
+   |  |  +--rw server-group* [server-group-name]
+   |  |     +--rw server-group-name    string
+   |  |     +--rw interface?           if:interface-ref
+   |  |     +--rw gateway-address?     inet:ipv4-address
+   |  |     +--rw server-address*      inet:ipv4-address
+   |  +--rw client {client}?
+   |     +--rw interfaces* [interface]
+   |        +--rw interface    if:interface-ref
+   |        +--rw client-id?   string
+   |        +--rw lease?       uint32
+   +--ro dhcp-state
+      +--ro server {server}?
+      |  +--ro packet-statistics
+      |  |  +--ro interface?   if:interface-state-ref
+      |  |  +--x clean-statistics?
+      |  |  |  +--ro input
+      |  |  |  |  +--ro clean-at?          yang:date-and-time
+      |  |  |  +--ro output
+      |  |  |     +--ro clean-finished-at? yang:date-and-time
+      |  |  +--ro receive
+      |  |  |  +--ro decline-packet?    uint32
+      |  |  |  +--ro discover-packet?   uint32
+      |  |  |  +--ro request-packet?    uint32
+      |  |  |  +--ro release-packet?    uint32
+      |  |  |  +--ro inform-packet?     uint32
+      |  |  +--ro send
+      |  |     +--ro offer-packet?   uint32
+      |  |     +--ro ack-packet?     uint32
+      |  |     +--ro nack-packet?    uint32
+      |  +--ro host
+      |  |  +--ro interface?               string
+      |  |  +--ro host-ip?                 string
+      |  |  +--ro host-hardware-address?   string
+      |  |  +--ro lease?                   uint32
+      |  |  +--ro type?                    allocate-type
+      |  +--ro ip-pool* [ip-pool-name]
+      |     +--ro ip-pool-name         string
+      |     +--ro gateway-ip?          inet:ip-address
+      |     +--ro gateway-mask?        inet:ip-prefix
+      |     +--ro used-ip-count?       uint32
+      |     +--ro idle-ip-count?       uint32
+      |     +--ro conflict-ip-count?   uint32
+      |     +--ro total-ip-count?      uint32
+      +--ro relay {relay}?
+      |  +--ro packet-statistics
+      |     +--ro interface?   if:interface-state-ref
+      |     +--x clean-statistics?
+      |     |  +--ro input
+      |     |  |  +--ro clean-at?          yang:date-and-time
+      |     |  +--ro output
+      |     |     +--ro clean-finished-at? yang:date-and-time
+      |     +--ro receive
+      |     |  +--ro offer-packet?      uint32
+      |     |  +--ro ack-packet?        uint32
+      |     |  +--ro nack-packet?       uint32
+      |     |  +--ro decline-packet?    uint32
+      |     |  +--ro discover-packet?   uint32
+      |     |  +--ro request-packet?    uint32
+      |     |  +--ro release-packet?    uint32
+      |     |  +--ro inform-packet?     uint32
+      |     +--ro send
+      |        +--ro offer-packet?      uint32
+      |        +--ro ack-packet?        uint32
+      |        +--ro nack-packet?       uint32
+      |        +--ro decline-packet?    uint32
+      |        +--ro discover-packet?   uint32
+      |        +--ro request-packet?    uint32
+      |        +--ro release-packet?    uint32
+      |        +--ro inform-packet?     uint32
+      +--ro client {client}?
+         +--ro packet-statistics
+            +--ro interface?   if:interface-state-ref
+            +--x clean-statistics?
+            |  +--ro input
+            |  |  +--ro clean-at?          yang:date-and-time
+            |  +--ro output
+            |     +--ro clean-finished-at? yang:date-and-time
+            +--ro receive
+            |  +--ro offer-packet?   uint32
+            |  +--ro ack-packet?     uint32
+            |  +--ro nack-packet?    uint32
+            +--ro send
+               +--ro decline-packet?    uint32
+               +--ro discover-packet?   uint32
+               +--ro request-packet?    uint32
+               +--ro release-packet?    uint32
+               +--ro inform-packet?     uint32
